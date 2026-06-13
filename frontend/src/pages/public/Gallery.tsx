@@ -1,0 +1,1 @@
+export default function Gallery() { return <div style={{padding:"80px 48px",textAlign:"center",color:"#64748B"}}>Halaman Galeri — Coming Soon</div> }

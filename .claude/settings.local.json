@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\HP\\\\Downloads\\\\gbi-sion-karawang-no-redis\\\\gbi-sion-karawang\" -Force | Format-Table Name, @{Name=\"Type\";Expression={if\\($_.PSIsContainer\\){\"Directory\"}else{\"File\"}}} -AutoSize)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\HP\\\\Downloads\\\\gbi-sion-karawang-no-redis\\\\gbi-sion-karawang\\\\backend\" -Force | Format-Table Name, @{Name=\"Type\";Expression={if\\($_.PSIsContainer\\){\"Directory\"}else{\"File\"}}} -AutoSize)",
+      "Bash(dir *)",
+      "Bash(copy *)",
+      "PowerShell(Copy-Item *)",
+      "Read(//mnt/c/Users/HP/Downloads/gbi-sion-karawang-no-redis/gbi-sion-karawang/**)",
+      "Bash(npx tsc *)"
+    ]
+  }
+}

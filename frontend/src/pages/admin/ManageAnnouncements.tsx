@@ -1,0 +1,1 @@
+export default function ManageAnnouncements() { return <div style={{color:"#64748B"}}>Manage Announcements — Coming Soon</div> }

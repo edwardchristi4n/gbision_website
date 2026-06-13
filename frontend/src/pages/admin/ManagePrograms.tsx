@@ -1,0 +1,1 @@
+export default function ManagePrograms() { return <div style={{color:"#64748B"}}>Manage Programs — Coming Soon</div> }

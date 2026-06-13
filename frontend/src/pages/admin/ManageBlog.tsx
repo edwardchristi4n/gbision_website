@@ -1,0 +1,1 @@
+export default function ManageBlog() { return <div style={{color:"#64748B"}}>Manage Blog — Coming Soon</div> }

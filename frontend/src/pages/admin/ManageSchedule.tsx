@@ -1,0 +1,1 @@
+export default function ManageSchedule() { return <div style={{color:"#64748B"}}>Manage Schedule — Coming Soon</div> }

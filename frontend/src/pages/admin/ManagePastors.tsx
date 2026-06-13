@@ -1,0 +1,1 @@
+export default function ManagePastors() { return <div style={{color:"#64748B"}}>Manage Pastors — Coming Soon</div> }

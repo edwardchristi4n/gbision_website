@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --navy: #0D2240;
+  --navy2: #1A3A5C;
+  --orange: #E8541A;
+  --orange2: #FF6B35;
+  --cream: #FDF8F3;
+  --gray: #64748B;
+  --light: #F8FAFC;
+  --border: #E8EDF2;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #fff;
+  color: #111;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  background: var(--orange);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover { background: var(--orange2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,84,26,.3); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--navy);
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 600;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-outline:hover { border-color: var(--navy); background: var(--light); }
+
+/* ── Section Labels ── */
+.section-tag {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -1px;
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+
+/* ── Nav Links ── */
+.nav-link {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+  transition: color 0.2s;
+  position: relative;
+  padding-bottom: 4px;
+  white-space: nowrap;
+}
+.nav-link:hover { color: var(--orange); }
+.nav-link.active { color: var(--orange); }
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--orange);
+  border-radius: 100px;
+}
+
+/* ── Responsive Layout Utilities ── */
+.page-inner { max-width: 1200px; margin: 0 auto; }
+.page-section { padding: 80px 48px; }
+.page-section-sm { padding: 56px 48px; }
+
+/* ── Navbar Responsive ── */
+.hamburger-btn { display: none !important; }
+
+/* ── Footer Grid ── */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 48px;
+}
+
+/* ── Page-hero shared ── */
+.page-hero {
+  position: relative;
+  padding: 120px 48px 96px;
+  background: var(--navy);
+  overflow: hidden;
+}
+.page-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* ═══════ RESPONSIVE BREAKPOINTS ═══════ */
+
+@media (max-width: 1024px) {
+  .page-section    { padding: 64px 32px; }
+  .page-section-sm { padding: 48px 32px; }
+  .page-hero       { padding: 96px 32px 80px; }
+  .footer-grid     { grid-template-columns: 1fr 1fr; gap: 36px; }
+}
+
+@media (max-width: 768px) {
+  .section-title { font-size: 28px; }
+
+  .page-section    { padding: 56px 20px; }
+  .page-section-sm { padding: 40px 20px; }
+  .page-hero       { padding: 80px 20px 64px; }
+  .page-inner      { padding: 0; }
+
+  .hamburger-btn   { display: flex !important; }
+  .desktop-nav     { display: none !important; }
+  .navbar-cta      { display: none !important; }
+
+  .footer-grid     { grid-template-columns: 1fr 1fr; gap: 28px; }
+}
+
+@media (max-width: 480px) {
+  .section-title   { font-size: 24px; letter-spacing: -0.5px; }
+  .footer-grid     { grid-template-columns: 1fr; gap: 24px; }
+}

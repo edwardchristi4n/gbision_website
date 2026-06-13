@@ -1,0 +1,1 @@
+export default function ManageGallery() { return <div style={{color:"#64748B"}}>Manage Gallery — Coming Soon</div> }

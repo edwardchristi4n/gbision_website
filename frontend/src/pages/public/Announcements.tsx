@@ -1,0 +1,1 @@
+export default function Announcements() { return <div style={{padding:"80px 48px",textAlign:"center",color:"#64748B"}}>Halaman Pengumuman — Coming Soon</div> }

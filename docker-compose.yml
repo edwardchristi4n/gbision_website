@@ -1,0 +1,19 @@
+version: "3.9"
+# Catatan: tidak menggunakan Redis — session disimpan di SQLite
+services:
+  api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend/uploads:/app/uploads
+      - ./backend/gbi_sion.db:/app/gbi_sion.db
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
