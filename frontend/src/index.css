@@ -1,7 +1,5 @@
-@import "tailwindcss";
-
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
+@import "tailwindcss";
 :root {
   --navy: #0D2240;
   --navy2: #1A3A5C;
@@ -21,6 +19,13 @@ body {
   color: #111;
   margin: 0;
   overflow-x: hidden;
+}
+
+/* ── Accessibility ── */
+:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 /* ── Buttons ── */
@@ -102,6 +107,18 @@ body {
   border-radius: 100px;
 }
 
+/* Dropdown */
+.nav-dropdown-container:hover .nav-dropdown-menu {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+.dropdown-item:hover {
+  background: #F8FAFC;
+  color: var(--orange) !important;
+}
+
 /* ── Responsive Layout Utilities ── */
 .page-inner { max-width: 1200px; margin: 0 auto; }
 .page-section { padding: 80px 48px; }
@@ -158,4 +175,18 @@ body {
 @media (max-width: 480px) {
   .section-title   { font-size: 24px; letter-spacing: -0.5px; }
   .footer-grid     { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* ═══════ ADMIN CMS RESPONSIVE ═══════ */
+@media (max-width: 1024px) {
+  .admin-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+@media (max-width: 768px) {
+  .admin-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .admin-main-grid  { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 480px) {
+  .admin-stats-grid { grid-template-columns: 1fr !important; }
 }

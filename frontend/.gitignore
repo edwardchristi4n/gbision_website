@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-#
+# env and db
 .env
 .env.example
 .gbi_sion.db

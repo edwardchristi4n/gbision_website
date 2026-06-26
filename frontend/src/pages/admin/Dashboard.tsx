@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { BookOpen, Image, Bell, Users, Church, TrendingUp, Plus, Upload, PenLine, Calendar } from "lucide-react"
+import { BookOpen, Image, Bell, Church, TrendingUp, Plus, Upload, PenLine, Calendar } from "lucide-react"
 import { NavLink } from "react-router-dom"
 import { useAuth } from "@/hooks/useAuth"
 
@@ -42,7 +42,7 @@ export default function Dashboard() {
       </motion.div>
 
       {/* Stats */}
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:16, marginBottom:28 }}>
+      <div className="admin-stats-grid" style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:16, marginBottom:28 }}>
         {stats.map((s,i) => (
           <motion.div key={i} {...fade(i+1)}
             style={{ background:"#fff", borderRadius:16, padding:20, border:"1px solid #E8EDF2", boxShadow:"0 1px 4px rgba(0,0,0,0.04)" }}>
@@ -60,7 +60,7 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 320px", gap:20 }}>
+      <div className="admin-main-grid" style={{ display:"grid", gridTemplateColumns:"1fr 320px", gap:20 }}>
 
         {/* Aktivitas Terbaru */}
         <motion.div {...fade(5)} style={{ background:"#fff", borderRadius:16, padding:24, border:"1px solid #E8EDF2" }}>

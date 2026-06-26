@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "@/hooks/useAuth"
 import { Eye, EyeOff, LogIn } from "lucide-react"
@@ -9,8 +9,14 @@ export default function AdminLogin() {
   const [showPw, setShowPw]     = useState(false)
   const [loading, setLoading]   = useState(false)
   const [error, setError]       = useState("")
-  const { login }   = useAuth()
+  const { login, isAuthenticated, isLoading } = useAuth()
   const navigate    = useNavigate()
+
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      navigate("/admin", { replace: true })
+    }
+  }, [isLoading, isAuthenticated, navigate])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

@@ -11,5 +11,7 @@ class Program(Base):
     location    = Column(String(200))
     image_url   = Column(String(300))
     is_active   = Column(Boolean, default=True)
+    # null = program umum gereja; 'remaja','pemuda','kaum_pria','kaum_wanita',... = komunitas
+    community   = Column(String(50), nullable=True)
     created_at  = Column(DateTime, server_default=func.now())
     updated_at  = Column(DateTime, server_default=func.now(), onupdate=func.now())

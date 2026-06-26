@@ -20,7 +20,7 @@ export default function About() {
           start: 'top 80%',
         }
       });
-      
+
       gsap.to('.parallax-img', {
         yPercent: 20,
         ease: 'none',
@@ -43,7 +43,7 @@ export default function About() {
             Kisah Kami
           </span>
           <h1 style={{ fontSize: 'clamp(40px, 6vw, 72px)', color: 'var(--navy)', marginTop: 16, marginBottom: 24, letterSpacing: '-1px', fontWeight: 800 }}>
-            Bertumbuh Dalam Iman, <br/>
+            Bertumbuh Dalam Iman, <br />
             <em style={{ color: 'var(--orange)', fontStyle: 'italic' }}>Berbuah Dalam Kasih.</em>
           </h1>
           <p style={{ fontSize: 18, color: 'var(--gray)', maxWidth: 600, margin: '0 auto', lineHeight: 1.6, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>

@@ -17,13 +17,23 @@ const PROGRAMS = [
     img: 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=800&auto=format&fit=crop'
   },
   {
-    title: 'Kelompok Sel',
+    title: 'Persekutuan Doa Wilayah',
     desc: 'Komunitas kecil untuk saling mendukung, berdoa, dan bertumbuh bersama dalam firman Tuhan.',
     img: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=800&auto=format&fit=crop'
   },
   {
     title: 'Pelayanan Musik',
     desc: 'Melayani Tuhan melalui pujian dan penyembahan yang berkuasa untuk membawa jemaat dalam hadirat-Nya.',
+    img: 'http  s://images.unsplash.com/photo-1612716092202-d97755b84943?q=80&w=800&auto=format&fit=crop'
+  },
+  {
+    title: 'Persekutuan Doa wilayah',
+    desc: 'Persekutuan Doa Wilayah adalah wadah bagi jemaat GBI Sion Karawang untuk saling menguatkan dan bertumbuh bersama dalam iman.',
+    img: 'https://images.unsplash.com/photo-1516280440502-a2cebc04be34?q=80&w=800&auto=format&fit=crop'
+  },
+  {
+    title: 'Baptisan',
+    desc: 'Baptisan adalah tanda pertobatan dan pengampunan dosa, sebagai tanda lahir baru dalam Kristus Yesus.',
     img: 'https://images.unsplash.com/photo-1516280440502-a2cebc04be34?q=80&w=800&auto=format&fit=crop'
   }
 ];
@@ -63,20 +73,20 @@ export default function Programs() {
             Pelayanan Kami
           </span>
           <h1 style={{ fontSize: 'clamp(36px, 5vw, 64px)', color: 'var(--navy)', marginTop: 16, letterSpacing: '-1px', fontWeight: 800 }}>
-            Temukan Tempat Anda<br/>Untuk <em style={{ color: 'var(--orange)', fontStyle: 'italic' }}>Melayani</em>
+            Temukan Tempat Anda<br />Untuk <em style={{ color: 'var(--orange)', fontStyle: 'italic' }}>Melayani</em>
           </h1>
         </div>
 
         <div className="prog-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 40 }}>
           {PROGRAMS.map((p, i) => (
             <div key={i} className="prog-item" style={{ cursor: 'pointer', border: '1px solid var(--border)', borderRadius: 20, overflow: 'hidden', background: '#fff', transition: 'box-shadow 0.3s' }}
-                 onMouseEnter={e => e.currentTarget.style.boxShadow = '0 20px 40px rgba(13,34,64,0.08)'}
-                 onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
+              onMouseEnter={e => e.currentTarget.style.boxShadow = '0 20px 40px rgba(13,34,64,0.08)'}
+              onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
             >
               <div style={{ width: '100%', height: 240, overflow: 'hidden' }}>
-                <img src={p.img} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} 
-                     onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
-                     onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                <img src={p.img} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
+                  onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
+                  onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
                 />
               </div>
               <div style={{ padding: 32 }}>
