@@ -21,4 +21,6 @@ backend/uploads/*
 .DS_Store
 Thumbs.db
 
+settings.json
+
 claude.exe
