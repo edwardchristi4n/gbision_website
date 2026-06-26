@@ -7,9 +7,10 @@ class BlogPost(Base):
     id           = Column(Integer, primary_key=True, index=True)
     title        = Column(String(300), nullable=False)
     slug         = Column(String(300), unique=True, index=True)  # URL-friendly title
-    content      = Column(Text)             # HTML dari rich text editor
+    content      = Column(Text)             # konten artikel
     excerpt      = Column(Text)             # ringkasan singkat
     cover_url    = Column(String(300))
+    category     = Column(String(50))       # 'renungan' | 'kesaksian'
     author_id    = Column(Integer, ForeignKey("users.id"))
     is_published = Column(Boolean, default=False)
     published_at = Column(DateTime)

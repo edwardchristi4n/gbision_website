@@ -28,7 +28,7 @@ def login(body: LoginRequest, response: Response, db: Session = Depends(get_db))
         key      = settings.session_cookie_name,
         value    = token,
         httponly = True,
-        secure   = False,     # Ganti True di production (HTTPS)
+        secure   = settings.environment == "production",
         samesite = "lax",
         max_age  = settings.session_ttl_minutes * 60
     )

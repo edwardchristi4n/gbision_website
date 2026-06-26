@@ -1,47 +1,35 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { ArrowRight } from 'lucide-react';
+import api from '@/lib/axios';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PROGRAMS = [
-  {
-    title: 'Sekolah Minggu',
-    desc: 'Pelayanan khusus anak-anak untuk mengenal kasih Tuhan sejak dini dengan metode yang interaktif.',
-    img: 'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?q=80&w=800&auto=format&fit=crop'
-  },
-  {
-    title: 'Youth & Remaja',
-    desc: 'Wadah bagi generasi muda untuk bertumbuh dan berkarya bagi Kristus dalam komunitas yang dinamis.',
-    img: 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=800&auto=format&fit=crop'
-  },
-  {
-    title: 'Persekutuan Doa Wilayah',
-    desc: 'Komunitas kecil untuk saling mendukung, berdoa, dan bertumbuh bersama dalam firman Tuhan.',
-    img: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=800&auto=format&fit=crop'
-  },
-  {
-    title: 'Pelayanan Musik',
-    desc: 'Melayani Tuhan melalui pujian dan penyembahan yang berkuasa untuk membawa jemaat dalam hadirat-Nya.',
-    img: 'http  s://images.unsplash.com/photo-1612716092202-d97755b84943?q=80&w=800&auto=format&fit=crop'
-  },
-  {
-    title: 'Persekutuan Doa wilayah',
-    desc: 'Persekutuan Doa Wilayah adalah wadah bagi jemaat GBI Sion Karawang untuk saling menguatkan dan bertumbuh bersama dalam iman.',
-    img: 'https://images.unsplash.com/photo-1516280440502-a2cebc04be34?q=80&w=800&auto=format&fit=crop'
-  },
-  {
-    title: 'Baptisan',
-    desc: 'Baptisan adalah tanda pertobatan dan pengampunan dosa, sebagai tanda lahir baru dalam Kristus Yesus.',
-    img: 'https://images.unsplash.com/photo-1516280440502-a2cebc04be34?q=80&w=800&auto=format&fit=crop'
-  }
-];
+interface ProgramItem {
+  id: number
+  title: string
+  description: string | null
+  schedule: string | null
+  location: string | null
+  image_url: string | null
+  is_active: boolean
+}
 
 export default function Programs() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [programs, setPrograms] = useState<ProgramItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    api.get('/programs?active_only=true&community=general')
+      .then(res => setPrograms(res.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if (loading || programs.length === 0) return;
     let ctx = gsap.context(() => {
       gsap.from('.prog-title', {
         y: 40,
@@ -63,7 +51,7 @@ export default function Programs() {
       });
     }, containerRef);
     return () => ctx.revert();
-  }, []);
+  }, [loading, programs]);
 
   return (
     <div ref={containerRef} style={{ background: '#fff', minHeight: '100vh', paddingTop: 120, paddingBottom: 100 }}>
@@ -77,28 +65,51 @@ export default function Programs() {
           </h1>
         </div>
 
-        <div className="prog-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 40 }}>
-          {PROGRAMS.map((p, i) => (
-            <div key={i} className="prog-item" style={{ cursor: 'pointer', border: '1px solid var(--border)', borderRadius: 20, overflow: 'hidden', background: '#fff', transition: 'box-shadow 0.3s' }}
-              onMouseEnter={e => e.currentTarget.style.boxShadow = '0 20px 40px rgba(13,34,64,0.08)'}
-              onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
-            >
-              <div style={{ width: '100%', height: 240, overflow: 'hidden' }}>
-                <img src={p.img} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
-                  onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
-                  onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-                />
-              </div>
-              <div style={{ padding: 32 }}>
-                <h3 style={{ fontSize: 24, color: 'var(--navy)', marginBottom: 12, letterSpacing: '-0.5px', fontWeight: 800 }}>{p.title}</h3>
-                <p style={{ fontSize: 15, color: 'var(--gray)', lineHeight: 1.6, marginBottom: 24, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>{p.desc}</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--orange)', fontWeight: 600, fontSize: 14, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-                  Pelajari Lebih Lanjut <ArrowRight size={16} />
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '80px 0', color: '#64748B' }}>
+            Memuat program...
+          </div>
+        ) : programs.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '80px 0', color: '#64748B' }}>
+            Belum ada program pelayanan.
+          </div>
+        ) : (
+          <div className="prog-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 40 }}>
+            {programs.map(p => (
+              <div key={p.id} className="prog-item" style={{ cursor: 'pointer', border: '1px solid var(--border)', borderRadius: 20, overflow: 'hidden', background: '#fff', transition: 'box-shadow 0.3s' }}
+                onMouseEnter={e => e.currentTarget.style.boxShadow = '0 20px 40px rgba(13,34,64,0.08)'}
+                onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
+              >
+                <div style={{ width: '100%', height: 240, overflow: 'hidden', background: '#f1f5f9' }}>
+                  {p.image_url ? (
+                    <img src={p.image_url} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
+                      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
+                      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+                    />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontSize: 14 }}>
+                      Tidak ada gambar
+                    </div>
+                  )}
+                </div>
+                <div style={{ padding: 32 }}>
+                  <h3 style={{ fontSize: 24, color: 'var(--navy)', marginBottom: 12, letterSpacing: '-0.5px', fontWeight: 800 }}>{p.title}</h3>
+                  {p.schedule && (
+                    <p style={{ fontSize: 13, color: 'var(--orange)', fontWeight: 600, marginBottom: 8, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                      {p.schedule}{p.location ? ` · ${p.location}` : ''}
+                    </p>
+                  )}
+                  <p style={{ fontSize: 15, color: 'var(--gray)', lineHeight: 1.6, marginBottom: 24, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                    {p.description || ''}
+                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--orange)', fontWeight: 600, fontSize: 14, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+                    Pelajari Lebih Lanjut <ArrowRight size={16} />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

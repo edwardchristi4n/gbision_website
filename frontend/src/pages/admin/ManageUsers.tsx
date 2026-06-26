@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react"
 import { Plus, Trash2, Edit, ShieldAlert, Users as UsersIcon } from "lucide-react"
+import { toast } from "sonner"
 import api from "@/lib/axios"
 import { useAuth } from "@/hooks/useAuth"
+import ConfirmDialog from "@/components/ui/ConfirmDialog"
 
 interface UserItem {
   id: number
@@ -47,11 +49,15 @@ export default function ManageUsers() {
   const isUserManager = user?.role === "superadmin" || user?.role === "admin"
   const availableRoles = user?.role === "superadmin" ? SUPERADMIN_ROLES : ADMIN_ROLES
 
+  type DialogState = { open: boolean; title: string; message: string; confirmLabel: string; variant: "danger" | "primary"; onConfirm: () => void }
+  const CLOSED: DialogState = { open: false, title: "", message: "", confirmLabel: "Lanjutkan", variant: "primary", onConfirm: () => {} }
+  const [dialog, setDialog] = useState<DialogState>(CLOSED)
+
   const fetchItems = () => {
     setLoading(true)
     api.get("/admin/users")
       .then(res => setItems(res.data))
-      .catch(err => console.error(err))
+      .catch(() => toast.error("Gagal memuat data pengguna."))
       .finally(() => setLoading(false))
   }
 
@@ -84,41 +90,67 @@ export default function ManageUsers() {
     setFormOpen(true)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    try {
-      if (editingId) {
-        const payload = formData.password
-          ? formData
-          : { name: formData.name, email: formData.email, role: formData.role }
-        await api.put(`/admin/users/${editingId}`, payload)
-      } else {
-        if (!formData.password) return alert("Password wajib diisi untuk akun baru!")
-        await api.post("/admin/users", formData)
+    if (!editingId && !formData.password) { toast.warning("Password wajib diisi untuk akun baru!"); return }
+    const snap = { ...formData }
+    const id = editingId
+    setDialog({
+      open: true,
+      title: id ? "Simpan Perubahan Akun?" : "Buat Akun Baru?",
+      message: id
+        ? "Yakin ingin menyimpan perubahan pada akun ini?"
+        : `Akun baru dengan role "${ROLE_LABELS[snap.role]}" akan dibuat.`,
+      confirmLabel: "Simpan",
+      variant: "primary",
+      onConfirm: async () => {
+        setDialog(CLOSED)
+        try {
+          if (id) {
+            const payload = snap.password
+              ? snap
+              : { name: snap.name, email: snap.email, role: snap.role }
+            await api.put(`/admin/users/${id}`, payload)
+            toast.success("Akun berhasil diperbarui!")
+          } else {
+            await api.post("/admin/users", snap)
+            toast.success("Akun baru berhasil dibuat!")
+          }
+          setFormOpen(false)
+          setEditingId(null)
+          setFormData({ name: "", email: "", password: "", role: "admin_remaja" })
+          fetchItems()
+        } catch (err: any) {
+          toast.error(err.response?.data?.detail || "Gagal menyimpan akun.")
+        }
       }
-      setFormOpen(false)
-      setEditingId(null)
-      setFormData({ name: "", email: "", password: "", role: "admin_remaja" })
-      fetchItems()
-    } catch (err: any) {
-      console.error(err)
-      alert(err.response?.data?.detail || "Gagal menyimpan user.")
-    }
+    })
   }
 
-  const handleDelete = async (id: number) => {
-    if (id === user!.id) return alert("Anda tidak bisa menghapus akun Anda sendiri!")
-    if (!confirm("Yakin ingin menghapus akun ini secara permanen?")) return
-    try {
-      await api.delete(`/admin/users/${id}`)
-      fetchItems()
-    } catch (err: any) {
-      alert(err.response?.data?.detail || "Gagal menghapus.")
-    }
+  const handleDelete = (id: number) => {
+    if (id === user!.id) { toast.error("Anda tidak bisa menghapus akun Anda sendiri!"); return }
+    setDialog({
+      open: true,
+      title: "Hapus Akun?",
+      message: "Akun ini akan dihapus permanen. Admin tidak akan bisa login lagi.",
+      confirmLabel: "Hapus",
+      variant: "danger",
+      onConfirm: async () => {
+        setDialog(CLOSED)
+        try {
+          await api.delete(`/admin/users/${id}`)
+          toast.success("Akun berhasil dihapus!")
+          fetchItems()
+        } catch (err: any) {
+          toast.error(err.response?.data?.detail || "Gagal menghapus akun.")
+        }
+      }
+    })
   }
 
   return (
     <div>
+      <ConfirmDialog {...dialog} onCancel={() => setDialog(CLOSED)} />
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-2xl font-bold text-navy">Manajemen User</h1>

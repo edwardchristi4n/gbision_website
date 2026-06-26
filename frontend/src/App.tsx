@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from "sonner";
 import PublicLayout from "@/components/layout/PublicLayout";
 import AdminLayout from "@/components/layout/AdminLayout";
 import ProtectedRoute from "@/components/common/ProtectedRoute";
@@ -8,6 +9,7 @@ import Programs from "@/pages/public/Programs";
 import Schedule from "@/pages/public/Schedule";
 import Gallery from "@/pages/public/Gallery";
 import Blog from "@/pages/public/Blog";
+import BlogDetail from "@/pages/public/BlogDetail";
 import Announcements from "@/pages/public/Announcements";
 import Contact from "@/pages/public/Contact";
 import Komunitas from "@/pages/public/Komunitas";
@@ -26,6 +28,7 @@ import Pastors from "@/pages/public/Pastors";
 export default function App() {
   return (
     <BrowserRouter>
+      <Toaster position="top-right" richColors closeButton duration={3000} />
       <Routes>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
@@ -35,6 +38,7 @@ export default function App() {
           <Route path="/jadwal" element={<Schedule />} />
           <Route path="/galeri" element={<Gallery />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogDetail />} />
           <Route path="/pengumuman" element={<Announcements />} />
           <Route path="/kontak" element={<Contact />} />
           <Route path="/komunitas" element={<Komunitas />} />

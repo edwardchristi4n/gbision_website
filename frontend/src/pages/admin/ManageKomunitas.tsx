@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react"
 import { Plus, Trash2, Edit, Users2 } from "lucide-react"
+import { toast } from "sonner"
 import api from "@/lib/axios"
 import { useAuth } from "@/hooks/useAuth"
 import ImageUpload from "@/components/forms/ImageUpload"
+import ConfirmDialog from "@/components/ui/ConfirmDialog"
 
 interface ProgramItem {
   id: number
@@ -52,6 +54,10 @@ export default function ManageKomunitas() {
   const [formOpen, setFormOpen] = useState(false)
   const [editingId, setEditingId] = useState<number | null>(null)
 
+  type DialogState = { open: boolean; title: string; message: string; confirmLabel: string; variant: "danger" | "primary"; onConfirm: () => void }
+  const CLOSED: DialogState = { open: false, title: "", message: "", confirmLabel: "Lanjutkan", variant: "primary", onConfirm: () => {} }
+  const [dialog, setDialog] = useState<DialogState>(CLOSED)
+
   const emptyForm = {
     title: "", description: "", schedule: "", location: "",
     image_url: "", is_active: true,
@@ -63,7 +69,7 @@ export default function ManageKomunitas() {
     setLoading(true)
     api.get(`/programs?active_only=false&community=${comm}`)
       .then(res => setItems(res.data))
-      .catch(err => console.error(err))
+      .catch(() => toast.error("Gagal memuat data program."))
       .finally(() => setLoading(false))
   }
 
@@ -85,47 +91,73 @@ export default function ManageKomunitas() {
     setFormOpen(true)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const payload = {
-      ...formData,
-      description: formData.description || null,
-      schedule:    formData.schedule    || null,
-      location:    formData.location    || null,
-      image_url:   formData.image_url   || null,
-      // community admin: backend auto-set; admin/superadmin: dari form
-      community:   isCommunityAdmin ? null : formData.community,
-    }
-    try {
-      if (editingId) {
-        await api.put(`/programs/${editingId}`, payload)
-      } else {
-        await api.post("/programs", payload)
+    const snap = { ...formData }
+    const id = editingId
+    const comm = selectedCommunity
+    setDialog({
+      open: true,
+      title: id ? "Simpan Perubahan?" : "Tambah Program Baru?",
+      message: id
+        ? "Yakin ingin menyimpan perubahan pada program ini?"
+        : "Yakin ingin menambahkan program baru ini?",
+      confirmLabel: "Simpan",
+      variant: "primary",
+      onConfirm: async () => {
+        setDialog(CLOSED)
+        const payload = {
+          ...snap,
+          description: snap.description || null,
+          schedule:    snap.schedule    || null,
+          location:    snap.location    || null,
+          image_url:   snap.image_url   || null,
+          community:   isCommunityAdmin ? null : snap.community,
+        }
+        try {
+          if (id) {
+            await api.put(`/programs/${id}`, payload)
+            toast.success("Program berhasil diperbarui!")
+          } else {
+            await api.post("/programs", payload)
+            toast.success("Program berhasil ditambahkan!")
+          }
+          setFormOpen(false)
+          setEditingId(null)
+          setFormData({ ...emptyForm, community: comm })
+          fetchItems(comm)
+        } catch (err: any) {
+          toast.error(err.response?.data?.detail || "Gagal menyimpan program.")
+        }
       }
-      setFormOpen(false)
-      setEditingId(null)
-      setFormData({ ...emptyForm, community: selectedCommunity })
-      fetchItems(selectedCommunity)
-    } catch (err: any) {
-      console.error(err)
-      alert(err.response?.data?.detail || "Gagal menyimpan program.")
-    }
+    })
   }
 
-  const handleDelete = async (id: number) => {
-    if (!confirm("Yakin ingin menghapus program/kegiatan ini?")) return
-    try {
-      await api.delete(`/programs/${id}`)
-      fetchItems(selectedCommunity)
-    } catch (err: any) {
-      alert(err.response?.data?.detail || "Gagal menghapus.")
-    }
+  const handleDelete = (id: number) => {
+    setDialog({
+      open: true,
+      title: "Hapus Program?",
+      message: "Program ini akan dihapus permanen dan tidak bisa dikembalikan.",
+      confirmLabel: "Hapus",
+      variant: "danger",
+      onConfirm: async () => {
+        setDialog(CLOSED)
+        try {
+          await api.delete(`/programs/${id}`)
+          toast.success("Program berhasil dihapus!")
+          fetchItems(selectedCommunity)
+        } catch (err: any) {
+          toast.error(err.response?.data?.detail || "Gagal menghapus.")
+        }
+      }
+    })
   }
 
   const communityLabel = getCommunityLabel(selectedCommunity)
 
   return (
     <div>
+      <ConfirmDialog {...dialog} onCancel={() => setDialog(CLOSED)} />
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-navy">Kelola Komunitas</h1>

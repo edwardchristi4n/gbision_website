@@ -1,7 +1,6 @@
-// Komponen upload gambar — drag & drop atau click, preview sebelum submit
-// Kirim file ke backend via multipart/form-data menggunakan axios
 import api from '@/lib/axios'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 export default function ImageUpload({ onUpload, folder = 'misc' }: { onUpload: (url: string) => void, folder?: string }) {
   const [uploading, setUploading] = useState(false)
@@ -26,9 +25,8 @@ export default function ImageUpload({ onUpload, folder = 'misc' }: { onUpload: (
         }
         onUpload(fullUrl)
       }
-    } catch (err) {
-      console.error('Upload failed:', err)
-      alert('Gagal mengunggah gambar.')
+    } catch {
+      toast.error('Gagal mengunggah gambar. Coba lagi.')
     } finally {
       setUploading(false)
     }

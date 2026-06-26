@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
+
+/* ── Tailwind v4: register custom color tokens ── */
+@theme {
+  --color-navy:         #0D2240;
+  --color-navy-light:   #1A3A5C;
+  --color-orange:       #E8541A;
+  --color-orange-light: #FF6B35;
+  --color-cream:        #FDF8F3;
+}
+
 :root {
   --navy: #0D2240;
   --navy2: #1A3A5C;

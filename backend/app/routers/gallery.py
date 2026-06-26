@@ -21,6 +21,14 @@ def create(body: GalleryCreate, db: Session = Depends(get_db)):
     g = GalleryItem(**body.model_dump())
     db.add(g); db.commit(); db.refresh(g); return g
 
+@router.put("/{item_id}", response_model=GalleryOut, dependencies=[Depends(get_current_admin)])
+def update(item_id: int, body: GalleryUpdate, db: Session = Depends(get_db)):
+    g = db.query(GalleryItem).filter(GalleryItem.id == item_id).first()
+    if not g: raise HTTPException(404)
+    for k, v in body.model_dump().items():
+        setattr(g, k, v)
+    db.commit(); db.refresh(g); return g
+
 @router.delete("/{item_id}", dependencies=[Depends(get_current_admin)])
 def delete(item_id: int, db: Session = Depends(get_db)):
     g = db.query(GalleryItem).filter(GalleryItem.id == item_id).first()

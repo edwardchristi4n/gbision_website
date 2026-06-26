@@ -161,7 +161,10 @@
       "mcp__Roblox_Studio__script_read",
       "mcp__Roblox_Studio__get_console_output",
       "mcp__Roblox_Studio__multi_edit",
-      "mcp__Roblox_Studio__script_grep"
+      "mcp__Roblox_Studio__script_grep",
+      "Bash(Remove-Item \"C:\\\\Users\\\\HP\\\\Downloads\\\\gbi-sion-karawang-no-redis\\\\gbi-sion-karawang\\\\frontend\\\\src\\\\hooks\\\\useFetch.ts\" -Force)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\HP\\\\Downloads\\\\gbi-sion-karawang-no-redis\\\\gbi-sion-karawang\\\\frontend\\\\src\\\\hooks\\\\usePagination.ts\" -Force)",
+      "Bash(Write-Host \"Deleted\")"
     ]
   }
 }

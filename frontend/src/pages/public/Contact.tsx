@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Phone, Mail, MessageCircle, Clock, ArrowRight, Send, CheckCircle } from "lucide-react";
+import { MapPin, Mail, MessageCircle, Clock, Send, CheckCircle } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import gerejaImg from "@/assets/images/gereja.jpg";
+
+// ─── CONSTANTS ───────────────────────────────────────────────────────────────
+
+const WA_NUMBER  = "6281234567890"; // ganti dengan nomor aktif
+const WA_LINK    = `https://wa.me/${WA_NUMBER}`;
+const GMAPS_LINK = "https://www.google.com/maps/place/Gereja+Bethel+Indonesia+Sion/@-6.3086222,107.3010535,17z";
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
@@ -12,17 +19,8 @@ const CONTACT_CARDS = [
     lines: ["Jl. Contoh No.123", "Karawang, Jawa Barat 41311"],
     color: "#FEF0E8",
     iconColor: "#E8541A",
-    link: "#",
+    link: GMAPS_LINK,
     linkLabel: "Lihat di Maps →",
-  },
-  {
-    icon: <Phone size={22} />,
-    title: "Telepon",
-    lines: ["+62 812 3456 7890", "+62 22 1234 5678"],
-    color: "#E8F4FD",
-    iconColor: "#1A3A5C",
-    link: "tel:+6281234567890",
-    linkLabel: "Hubungi Sekarang →",
   },
   {
     icon: <MessageCircle size={22} />,
@@ -30,7 +28,7 @@ const CONTACT_CARDS = [
     lines: ["+62 812 3456 7890", "Senin – Sabtu, 08.00–17.00"],
     color: "#E8F8F0",
     iconColor: "#0F6E56",
-    link: "#",
+    link: WA_LINK,
     linkLabel: "Chat di WhatsApp →",
   },
   {
@@ -42,12 +40,21 @@ const CONTACT_CARDS = [
     link: "mailto:info@gbision.org",
     linkLabel: "Kirim Email →",
   },
+  {
+    icon: <Clock size={22} />,
+    title: "Jam Kantor",
+    lines: ["Senin – Jumat: 08.00–17.00", "Sabtu: 08.00–13.00", "Minggu: 07.00–15.00"],
+    color: "#E8F4FD",
+    iconColor: "#1A3A5C",
+    link: "#form",
+    linkLabel: "Kirim Pesan →",
+  },
 ];
 
 const OFFICE_HOURS = [
   { day: "Senin – Jumat", time: "08.00 – 17.00 WIB" },
-  { day: "Sabtu", time: "08.00 – 13.00 WIB" },
-  { day: "Minggu", time: "07.00 – 15.00 WIB" },
+  { day: "Sabtu",         time: "08.00 – 13.00 WIB" },
+  { day: "Minggu",        time: "07.00 – 15.00 WIB" },
 ];
 
 const SUBJECT_OPTIONS = [
@@ -61,16 +68,68 @@ const SUBJECT_OPTIONS = [
 ];
 
 const SOCIALS = [
-  { id: "IG", label: "Instagram", color: "#E8541A", text: "@gbisionkarawang" },
-  { id: "YT", label: "YouTube", color: "#1A3A5C", text: "GBI Sion Karawang" },
-  { id: "WA", label: "WhatsApp", color: "#0F6E56", text: "+62 812 3456 7890" },
-  { id: "FB", label: "Facebook", color: "#1A4A8F", text: "GBI Sion Karawang" },
+  {
+    id: "IG",
+    label: "Instagram",
+    text: "@gbisionkarawang",
+    brandColor: "#E1306C",
+    hoverBg: "rgba(225,48,108,0.06)",
+    iconBg: "linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)",
+    link: "https://instagram.com/gbisionkarawang",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="white" width="22" height="22">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      </svg>
+    ),
+  },
+  {
+    id: "YT",
+    label: "YouTube",
+    text: "GBI Sion Karawang",
+    brandColor: "#FF0000",
+    hoverBg: "rgba(255,0,0,0.05)",
+    iconBg: "#FF0000",
+    link: "https://youtube.com",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="white" width="22" height="22">
+        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+      </svg>
+    ),
+  },
+  {
+    id: "WA",
+    label: "WhatsApp",
+    text: "+62 812 3456 7890",
+    brandColor: "#25D366",
+    hoverBg: "rgba(37,211,102,0.06)",
+    iconBg: "#25D366",
+    link: WA_LINK,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="white" width="22" height="22">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+      </svg>
+    ),
+  },
+  {
+    id: "FB",
+    label: "Facebook",
+    text: "GBI Sion Karawang",
+    brandColor: "#1877F2",
+    hoverBg: "rgba(24,119,242,0.06)",
+    iconBg: "#1877F2",
+    link: "https://facebook.com",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="white" width="22" height="22">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+      </svg>
+    ),
+  },
 ];
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 
-const fade = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.55 } } };
-const fadeR = { hidden: { opacity: 0, x: 24 }, show: { opacity: 1, x: 0, transition: { duration: 0.55 } } };
+const fade       = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.55 } } };
+const fadeR      = { hidden: { opacity: 0, x: 24 }, show: { opacity: 1, x: 0, transition: { duration: 0.55 } } };
 const staggerWrap = (delay = 0) => ({ hidden: {}, show: { transition: { staggerChildren: 0.1, delayChildren: delay } } });
 
 function FloatDot({ x, y, size, delay, duration }: { x: string; y: string; size: number; delay: number; duration: number }) {
@@ -85,8 +144,9 @@ function FloatDot({ x, y, size, delay, duration }: { x: string; y: string; size:
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted]   = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [hoveredSocial, setHoveredSocial] = useState<string | null>(null);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
@@ -110,28 +170,29 @@ export default function Contact() {
       <style>{`
         .kontak-section { padding: 80px 48px; }
         .kontak-inner   { max-width: 1200px; margin: 0 auto; }
-        .kontak-cards-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
-        .kontak-form-grid  { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: start; }
-        .kontak-socials-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+        .kontak-cards-grid   { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+        .kontak-form-grid    { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: start; }
+        .kontak-socials-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
         .kontak-card { transition: all .28s; }
         .kontak-card:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(13,34,64,.1); }
+        .social-card { transition: background .25s, border-color .25s, box-shadow .25s, transform .25s; }
+        .social-card:hover { transform: translateY(-4px); }
         .form-input:focus { border-color: #E8541A !important; }
         .form-input::placeholder { color: #aaa; }
-        @keyframes heroGlow {
-          0%,100% { opacity:.13; } 50% { opacity:.22; }
-        }
+        @keyframes heroGlow { 0%,100% { opacity:.13; } 50% { opacity:.22; } }
         .kontak-hero-glow { animation: heroGlow 5s ease-in-out infinite; }
 
         @media (max-width: 1024px) {
           .kontak-section { padding: 64px 32px; }
-          .kontak-cards-grid  { grid-template-columns: repeat(2,1fr); }
+          .kontak-cards-grid   { grid-template-columns: repeat(2,1fr); }
           .kontak-socials-grid { grid-template-columns: repeat(2,1fr); }
         }
         @media (max-width: 768px) {
           .kontak-section { padding: 52px 20px; }
-          .kontak-cards-grid  { grid-template-columns: 1fr; }
-          .kontak-form-grid   { grid-template-columns: 1fr; gap: 32px; }
+          .kontak-cards-grid   { grid-template-columns: 1fr; }
+          .kontak-form-grid    { grid-template-columns: 1fr; gap: 32px; }
           .kontak-socials-grid { grid-template-columns: repeat(2,1fr); }
+          .map-wrapper { margin: 0 20px 52px !important; height: 320px !important; }
         }
         @media (max-width: 480px) {
           .kontak-socials-grid { grid-template-columns: 1fr; }
@@ -141,9 +202,11 @@ export default function Contact() {
       {/* ═══ HERO ═══════════════════════════════════════════════════════ */}
       <section style={{ position: "relative", padding: "120px 20px 100px", background: "#0D2240", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0 }}>
-          <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg,#0D2240 0%,#1a3a5c 40%,#0D2240 100%)" }} />
+          <img src={gerejaImg} alt="" aria-hidden="true"
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,rgba(13,34,64,0.82) 0%,rgba(26,58,92,0.76) 45%,rgba(13,34,64,0.84) 100%)" }} />
           <div className="kontak-hero-glow" style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(ellipse 60% 50% at 65% 35%,rgba(232,84,26,.15),transparent 65%),radial-gradient(ellipse 40% 40% at 25% 72%,rgba(212,168,67,.09),transparent 60%)" }} />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(13,34,64,.1) 0%,rgba(13,34,64,.5) 100%)" }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(13,34,64,.05) 0%,rgba(13,34,64,.45) 100%)" }} />
         </div>
 
         <FloatDot x="7%" y="22%" size={5} delay={0} duration={4.5} />
@@ -171,11 +234,12 @@ export default function Contact() {
           </motion.p>
 
           <motion.div variants={fade} style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="tel:+6281234567890" style={{ textDecoration: "none" }}>
+            {/* Kontak Kami → WhatsApp */}
+            <a href={WA_LINK} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
               <button style={{ padding: "13px 28px", borderRadius: 100, background: "#E8541A", color: "#fff", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "inherit", display: "inline-flex", alignItems: "center", gap: 8, transition: "all .25s" }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 10px 28px rgba(232,84,26,.4)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}>
-                <Phone size={16} /> Telepon Kami
+                <MessageCircle size={16} /> Kontak Kami
               </button>
             </a>
             <a href="#form" style={{ textDecoration: "none" }}>
@@ -196,10 +260,10 @@ export default function Contact() {
           .marquee-kontak { display:flex;align-items:center;white-space:nowrap;width:max-content;animation:marqueeScroll 30s linear infinite; }
         `}</style>
         <div className="marquee-kontak" aria-hidden="true">
-          {["Hubungi Kami", "✦", "Lokasi Gereja", "✦", "Konseling", "✦", "Jadwal Ibadah", "✦", "WhatsApp", "✦", "Email", "✦",
-            "Hubungi Kami", "✦", "Lokasi Gereja", "✦", "Konseling", "✦", "Jadwal Ibadah", "✦", "WhatsApp", "✦", "Email", "✦",
+          {["Hubungi Kami","✦","Lokasi Gereja","✦","Konseling","✦","Jadwal Ibadah","✦","WhatsApp","✦","Email","✦",
+            "Hubungi Kami","✦","Lokasi Gereja","✦","Konseling","✦","Jadwal Ibadah","✦","WhatsApp","✦","Email","✦",
           ].map((item, i) => (
-            <span key={i} style={{ fontSize: item === "✦" ? 9 : 11, fontWeight: 700, letterSpacing: "2px", textTransform: "uppercase", color: item === "✦" ? "#E8541A" : "rgba(255,255,255,.5)", padding: item === "✦" ? "0 10px" : "0 22px" }}>{item}</span>
+            <span key={i} style={{ fontSize: item==="✦"?9:11, fontWeight:700, letterSpacing:"2px", textTransform:"uppercase", color: item==="✦"?"#E8541A":"rgba(255,255,255,.5)", padding: item==="✦"?"0 10px":"0 22px" }}>{item}</span>
           ))}
         </div>
       </div>
@@ -226,7 +290,10 @@ export default function Contact() {
                 {card.lines.map(line => (
                   <p key={line} style={{ fontSize: 13.5, color: "#444", marginBottom: 3, lineHeight: 1.6 }}>{line}</p>
                 ))}
-                <a href={card.link} style={{ textDecoration: "none", display: "block", marginTop: 14, fontSize: 13, fontWeight: 700, color: card.iconColor }}>{card.linkLabel}</a>
+                <a href={card.link} target={card.link.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer"
+                  style={{ textDecoration: "none", display: "block", marginTop: 14, fontSize: 13, fontWeight: 700, color: card.iconColor }}>
+                  {card.linkLabel}
+                </a>
               </motion.div>
             ))}
           </div>
@@ -265,7 +332,6 @@ export default function Contact() {
               ) : (
                 <motion.form variants={fade} onSubmit={handleSubmit}
                   style={{ background: "#fff", borderRadius: 20, padding: "32px", border: "1px solid #E8EDF2", display: "flex", flexDirection: "column", gap: 16 }}>
-
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                     <div>
                       <label style={{ fontSize: 12, fontWeight: 700, color: "#0D2240", letterSpacing: 0.3, display: "block", marginBottom: 6 }}>Nama Lengkap *</label>
@@ -278,31 +344,25 @@ export default function Contact() {
                         className="form-input" style={inputStyle} placeholder="+62..." />
                     </div>
                   </div>
-
                   <div>
                     <label style={{ fontSize: 12, fontWeight: 700, color: "#0D2240", letterSpacing: 0.3, display: "block", marginBottom: 6 }}>Alamat Email *</label>
                     <input name="email" value={form.email} onChange={handleChange} required type="email"
                       className="form-input" style={inputStyle} placeholder="email@anda.com" />
                   </div>
-
                   <div>
                     <label style={{ fontSize: 12, fontWeight: 700, color: "#0D2240", letterSpacing: 0.3, display: "block", marginBottom: 6 }}>Subjek</label>
                     <select name="subject" value={form.subject} onChange={handleChange}
                       className="form-input" style={{ ...inputStyle, cursor: "pointer" }}>
                       <option value="">Pilih subjek...</option>
-                      {SUBJECT_OPTIONS.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
+                      {SUBJECT_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                     </select>
                   </div>
-
                   <div>
                     <label style={{ fontSize: 12, fontWeight: 700, color: "#0D2240", letterSpacing: 0.3, display: "block", marginBottom: 6 }}>Pesan *</label>
                     <textarea name="message" value={form.message} onChange={handleChange} required rows={5}
                       className="form-input" style={{ ...inputStyle, resize: "vertical", lineHeight: 1.6 }}
                       placeholder="Tuliskan pesan Anda di sini..." />
                   </div>
-
                   <button type="submit" disabled={submitting}
                     style={{ padding: "13px 28px", borderRadius: 100, background: submitting ? "#aaa" : "#E8541A", color: "#fff", fontSize: 14, fontWeight: 700, border: "none", cursor: submitting ? "not-allowed" : "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all .25s", marginTop: 4 }}>
                     {submitting ? "Mengirim..." : <><Send size={16} /> Kirim Pesan</>}
@@ -339,10 +399,12 @@ export default function Contact() {
                   </div>
                   <h4 style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 10 }}>Lokasi Kami</h4>
                   <p style={{ fontSize: 13.5, color: "rgba(255,255,255,.65)", lineHeight: 1.7, marginBottom: 16 }}>
-                    Jl. Contoh No.123, Karawang,<br />Jawa Barat 41311
+                    Gereja Bethel Indonesia Sion<br />Karawang, Jawa Barat
                   </p>
-                  <a href="#" style={{ textDecoration: "none" }}>
-                    <button style={{ padding: "9px 18px", borderRadius: 100, background: "#E8541A", color: "#fff", fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "inherit", display: "inline-flex", alignItems: "center", gap: 7, transition: "all .2s" }}>
+                  <a href={GMAPS_LINK} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                    <button style={{ padding: "9px 18px", borderRadius: 100, background: "#E8541A", color: "#fff", fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "inherit", display: "inline-flex", alignItems: "center", gap: 7, transition: "all .2s" }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
+                      onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
                       <MapPin size={13} /> Buka Google Maps
                     </button>
                   </a>
@@ -353,50 +415,112 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* ═══ MAP PLACEHOLDER ════════════════════════════════════════════ */}
+      {/* ═══ GOOGLE MAPS ════════════════════════════════════════════════ */}
       <section style={{ background: "#fff" }}>
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-          style={{ margin: "0 48px 80px", borderRadius: 20, overflow: "hidden", position: "relative", background: "linear-gradient(135deg,#0D2240,#1A3A5C)", minHeight: 280, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <style>{`@media(max-width:768px){.map-section{margin:0 20px 52px!important;}}`}</style>
-          <div style={{ position: "absolute", inset: 0, opacity: 0.1 }}>
-            <div style={{ width: "100%", height: "100%", backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px)", backgroundSize: "40px 40px" }} />
-          </div>
-          <div style={{ position: "absolute", top: "30%", left: "48%", width: 16, height: 16, borderRadius: "50%", background: "#E8541A", boxShadow: "0 0 0 6px rgba(232,84,26,.3),0 0 0 12px rgba(232,84,26,.1)" }} />
-          <div style={{ textAlign: "center", position: "relative", zIndex: 1 }}>
-            <div style={{ width: 60, height: 60, borderRadius: "50%", background: "rgba(232,84,26,.9)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", boxShadow: "0 0 0 10px rgba(232,84,26,.15)" }}>
-              <MapPin size={26} color="#fff" />
-            </div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: "#fff", marginBottom: 4 }}>GBI Sion Karawang</div>
-            <div style={{ fontSize: 13, color: "rgba(255,255,255,.6)", marginBottom: 20 }}>Jl. Contoh No.123, Karawang, Jawa Barat</div>
-            <a href="#" style={{ textDecoration: "none" }}>
-              <button style={{ padding: "10px 22px", borderRadius: 100, background: "#E8541A", color: "#fff", fontSize: 13, fontWeight: 700, border: "none", cursor: "pointer", fontFamily: "inherit", display: "inline-flex", alignItems: "center", gap: 8 }}>
-                <ArrowRight size={14} /> Buka di Google Maps
-              </button>
-            </a>
-          </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.55 }}
+          className="map-wrapper"
+          style={{ margin: "0 48px 80px", borderRadius: 20, overflow: "hidden", height: 450, boxShadow: "0 8px 40px rgba(13,34,64,.12)", border: "1px solid #E8EDF2" }}
+        >
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.6576984820936!2d107.30105347353981!3d-6.308622293680643!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6977c4a3d9a5c5%3A0xe9499e4009260c77!2sGereja%20Bethel%20Indonesia%20Sion!5e0!3m2!1sid!2sid!4v1782496310238!5m2!1sid!2sid"
+            width="100%" height="100%"
+            style={{ border: 0, display: "block" }}
+            allowFullScreen loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+            title="Lokasi GBI Sion Karawang"
+          />
         </motion.div>
       </section>
 
       {/* ═══ SOSIAL MEDIA ════════════════════════════════════════════════ */}
-      <section className="kontak-section" style={{ background: "#FDF8F3", paddingTop: 0 }}>
+      <section className="kontak-section" style={{ background: "#FDF8F3" }}>
         <div className="kontak-inner">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ marginBottom: 36, textAlign: "center" }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            style={{ marginBottom: 48, textAlign: "center" }}>
             <span className="section-tag" style={{ display: "block", textAlign: "center" }}>IKUTI KAMI</span>
             <div className="section-title" style={{ textAlign: "center" }}>Terhubung di<br />Media Sosial</div>
+            <p style={{ color: "#64748B", fontSize: 14, marginTop: 12, fontFamily: "'Plus Jakarta Sans',sans-serif" }}>
+              Dapatkan update terbaru, jadwal ibadah, dan momen kebersamaan jemaat.
+            </p>
           </motion.div>
 
           <div className="kontak-socials-grid">
-            {SOCIALS.map((s, i) => (
-              <motion.div key={s.id}
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }} viewport={{ once: true }}
-                style={{ background: "#fff", borderRadius: 16, padding: "22px 20px", border: "1px solid #E8EDF2", cursor: "pointer", transition: "all .25s", textAlign: "center" }}
-                whileHover={{ y: -3, boxShadow: "0 10px 32px rgba(13,34,64,.1)" }}>
-                <div style={{ width: 52, height: 52, borderRadius: "50%", background: s.color, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px", fontSize: 15, fontWeight: 800, color: "#fff" }}>{s.id}</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#0D2240", marginBottom: 3 }}>{s.label}</div>
-                <div style={{ fontSize: 12.5, color: "#64748B" }}>{s.text}</div>
-              </motion.div>
-            ))}
+            {SOCIALS.map((s, i) => {
+              const isHovered = hoveredSocial === s.id;
+              return (
+                <motion.a
+                  key={s.id}
+                  href={s.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  viewport={{ once: true }}
+                  className="social-card"
+                  onMouseEnter={() => setHoveredSocial(s.id)}
+                  onMouseLeave={() => setHoveredSocial(null)}
+                  style={{
+                    display: "block",
+                    textDecoration: "none",
+                    background: isHovered ? s.hoverBg : "#fff",
+                    borderRadius: 20,
+                    padding: "28px 24px",
+                    border: isHovered ? `1.5px solid ${s.brandColor}` : "1.5px solid #E8EDF2",
+                    boxShadow: isHovered ? `0 12px 36px ${s.brandColor}22` : "0 2px 8px rgba(13,34,64,.04)",
+                    textAlign: "center",
+                    cursor: "pointer",
+                  }}
+                >
+                  {/* Icon circle */}
+                  <div style={{
+                    width: 60, height: 60, borderRadius: "50%",
+                    background: s.iconBg,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    margin: "0 auto 16px",
+                    boxShadow: isHovered ? `0 6px 20px ${s.brandColor}40` : "none",
+                    transition: "box-shadow .25s",
+                  }}>
+                    {s.icon}
+                  </div>
+
+                  {/* Label */}
+                  <div style={{
+                    fontSize: 15, fontWeight: 800,
+                    color: isHovered ? s.brandColor : "#0D2240",
+                    marginBottom: 5,
+                    transition: "color .25s",
+                    fontFamily: "'Plus Jakarta Sans',sans-serif",
+                  }}>
+                    {s.label}
+                  </div>
+
+                  {/* Handle */}
+                  <div style={{
+                    fontSize: 13, color: "#64748B",
+                    fontFamily: "'Plus Jakarta Sans',sans-serif",
+                    lineHeight: 1.4,
+                  }}>
+                    {s.text}
+                  </div>
+
+                  {/* "Ikuti" link-style cta */}
+                  <div style={{
+                    marginTop: 14,
+                    fontSize: 12, fontWeight: 700,
+                    color: isHovered ? s.brandColor : "#94A3B8",
+                    letterSpacing: "0.5px",
+                    textTransform: "uppercase",
+                    transition: "color .25s",
+                    fontFamily: "'Plus Jakarta Sans',sans-serif",
+                  }}>
+                    {s.id === "WA" ? "Chat Sekarang →" : "Ikuti Kami →"}
+                  </div>
+                </motion.a>
+              );
+            })}
           </div>
         </div>
       </section>

@@ -7,7 +7,8 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./gbi_sion.db"
 
     secret_key: str          = "dev-secret-key-ganti-di-production"
-    session_cookie_name: str = "gbi_session"
+    environment: str          = "development"
+    session_cookie_name: str  = "gbi_session"
     session_ttl_minutes: int = 15
 
     # Terima string biasa atau JSON array dari .env

@@ -26,6 +26,7 @@ def _run_migrations():
     from sqlalchemy import text
     migrations = [
         "ALTER TABLE programs ADD COLUMN community VARCHAR(50)",
+        "ALTER TABLE blog_posts ADD COLUMN category VARCHAR(50)",
     ]
     with engine.connect() as conn:
         for sql in migrations:

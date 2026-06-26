@@ -19,7 +19,7 @@ export default function Gallery() {
   useEffect(() => {
     api.get("/gallery")
       .then(res => setPhotos(res.data))
-      .catch(err => console.error("Failed to load gallery", err))
+      .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
 
